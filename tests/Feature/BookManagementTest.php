@@ -14,7 +14,7 @@ class BookManagementTest extends TestCase
     /** @test */
     public function a_book_can_be_added_to_the_library()
     {        
-        $response = $this->post('/books', $this->materialDetail());
+        $response = $this->post('/books', $this->bookDetail());
 
         $book = Book::first();
         
@@ -26,7 +26,7 @@ class BookManagementTest extends TestCase
      /** @test */
      public function a_title_is_required()
      {        
-        $response = $this->post('/books', $this->materialDetail());
+        $response = $this->post('/books', $this->bookDetail());
 
         $response->assertSessionHasErrors('title');
      } 
@@ -34,7 +34,7 @@ class BookManagementTest extends TestCase
      /** @test */
      public function an_author_is_required()
      {        
-        $response = $this->post('/books', array_merge($this->materialDetail(), ['author_id' => '']));
+        $response = $this->post('/books', array_merge($this->bookDetail(), ['author_id' => '']));
 
         $response->assertSessionHasErrors('author_id');
      }
@@ -42,7 +42,7 @@ class BookManagementTest extends TestCase
      /** @test */
      public function a_book_can_be_updated()
      {        
-        $this->post('/books', $this->materialDetail());
+        $this->post('/books', $this->bookDetail());
             
         $book = Book::first();
             
@@ -59,7 +59,7 @@ class BookManagementTest extends TestCase
     /** @test */
     public function a_book_can_be_deleted()
     {
-        $this->post('/books', $this->materialDetail(0));
+        $this->post('/books', $this->bookDetail(0));
             
         $book = Book::first();
         $this->assertCount(1, Book::all());
@@ -88,7 +88,7 @@ class BookManagementTest extends TestCase
 
     }
 
-    private function materialDetail()
+    private function bookDetail()
     {
         return [
             'title' => 'Cool Book Title',
