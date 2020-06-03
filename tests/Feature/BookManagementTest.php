@@ -26,7 +26,10 @@ class BookManagementTest extends TestCase
      /** @test */
      public function a_title_is_required()
      {        
-        $response = $this->post('/books', $this->bookDetail());
+        $response = $this->post('/books', [
+            'title' => '',
+            'author' => 'Helen',
+        ]);
 
         $response->assertSessionHasErrors('title');
      } 
@@ -53,13 +56,13 @@ class BookManagementTest extends TestCase
             
         $this->assertEquals('New Title', Book::first()->title);
         $this->assertEquals(2, Book::first()->author_id);
-        $response->assertRedirect($book->path());
+        $response->assertRedirect($book->fresh()->path());
     }
     
     /** @test */
     public function a_book_can_be_deleted()
     {
-        $this->post('/books', $this->bookDetail(0));
+        $this->post('/books', $this->bookDetail());
             
         $book = Book::first();
         $this->assertCount(1, Book::all());
@@ -87,7 +90,7 @@ class BookManagementTest extends TestCase
         $this->assertCount(1, Author::all());
 
     }
-
+    
     private function bookDetail()
     {
         return [
